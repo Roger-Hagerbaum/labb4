@@ -2,3 +2,5 @@
 /.gradle/
 /.classpath
 /.project
+/.idea
+/build

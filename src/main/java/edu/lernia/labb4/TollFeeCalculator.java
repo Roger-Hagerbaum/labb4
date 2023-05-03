@@ -25,7 +25,7 @@ public class TollFeeCalculator {
 
     }
 
-    private static int getTotalFeeCost(LocalDateTime[] dates) {
+   protected static int getTotalFeeCost(LocalDateTime[] dates) {
         int totalFee = 0;
         LocalDateTime intervalStart = dates[0];
         for(LocalDateTime date: dates) {
@@ -35,14 +35,15 @@ public class TollFeeCalculator {
                 totalFee += getTollFeePerPassing(date);
 
             } else {
-                totalFee += Math.max(getTollFeePerPassing(date), getTollFeePerPassing(intervalStart));
-
+                if(totalFee < Math.max(getTollFeePerPassing(date), getTollFeePerPassing(intervalStart))) {
+                    totalFee = Math.max(getTollFeePerPassing(date), getTollFeePerPassing(intervalStart));
+                }
             }
         }
         return Math.min(totalFee, 60);
     }
 
-    private static int getTollFeePerPassing(LocalDateTime date) {
+   protected static int getTollFeePerPassing(LocalDateTime date) {
         if (isTollFreeDate(date)) return 0;
         int hour = date.getHour();
         int minute = date.getMinute();
@@ -58,7 +59,7 @@ public class TollFeeCalculator {
         else return 0;
     }
 
-    private static boolean isTollFreeDate(LocalDateTime date) {
+   protected static boolean isTollFreeDate(LocalDateTime date) {
         return date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7 || date.getMonth().getValue() == 7;
     }
 
